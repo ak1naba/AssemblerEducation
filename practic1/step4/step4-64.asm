@@ -12,6 +12,6 @@ _start:
     sub rax, rbx   
     mov [rel A2], al   
     
-    mov eax, 1
-    mov ebx,0
-    int 80h;   
+    mov eax, 60        
+    xor edi, edi       
+    syscall     
