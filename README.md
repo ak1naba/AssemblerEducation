@@ -23,4 +23,4 @@ ld [....].o -o [....].exe
 ```bash
 [....].exe
 ```
-[Warning] Работать из CMD, не PowerShell
+[!WARNING] Работать из CMD, не PowerShell
