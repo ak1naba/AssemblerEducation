@@ -4,7 +4,7 @@
 
 ## Установка
 Установил локально по инструкции с сайта  
-[text](https://metanit.com/assembler/nasm/1.5.php)
+[Metanint](https://metanit.com/assembler/nasm/1.5.php)
 
 ## Ход выполения
 Работы распределены по папкам, в них будет файлы ассемблера и тектосвые файлы
