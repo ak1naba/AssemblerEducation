@@ -27,6 +27,6 @@ _start:
     mov [A4], al          
 
    
-    mov eax, 60           
-    xor edi, edi          
-    syscall               
+    mov eax, 1       
+    mov ebx, 0       
+    int 80h               
