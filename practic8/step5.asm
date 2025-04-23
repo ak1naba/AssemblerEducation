@@ -18,9 +18,9 @@
 section .data
     msg_result db "Result: ", 0
     msg_newline db 0xA, 0
-    x dd 5
-    y dd 3
-    z dd 4
+    x dd 5  ;test value
+    y dd 3  ;test value
+    z dd 4  ;test value
     result dd 0
 
 section .bss
