@@ -90,7 +90,6 @@ main:
     jge .next_min5
     mov [rel min], eax
 .next_min5:
-
     mov eax, [rel num2]
     add [rel sum], eax
 
@@ -106,17 +105,14 @@ main:
     lea rcx, [rel format_out_max]
     mov edx, [rel max]
     call printf
-    add rsp, 8
-
     lea rcx, [rel format_out_min]
     mov edx, [rel min]
     call printf
-    add rsp, 8
 
     lea rcx, [rel format_out_sum]
     mov edx, [rel sum]
     call printf
-    add rsp, 8
 
-    xor ecx, ecx
-    call ExitProcess
+
+
+
