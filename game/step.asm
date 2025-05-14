@@ -4,7 +4,7 @@ section .data
     social_welfare dq 50
     jobs dq 200
     happiness dq 75
-    money dq 1000000  ; Initial treasury money
+    money dq 100000  ; Initial treasury money
     turns_left dq 10   ; Total turns available
     factories dq 0     ; Number of factories built
 
@@ -68,16 +68,49 @@ section .text
     mov rax, [rel money]
     sub rax, %1
     js %%not_enough_funds
+    
     mov [rel money], rax
     lea rcx, [rel built_success]
     call printf
     lea rcx, [rel %2]
     call printf
+    
+    mov rax, [rel turns_left]
+    dec rax
+    mov [rel turns_left], rax
+    
+    %ifidni %2, house_effect
+        mov rax, [rel population]
+        add rax, 50
+        mov [rel population], rax
+    %elifidni %2, hospital_effect
+        mov rax, [rel social_welfare]
+        add rax, 10
+        mov [rel social_welfare], rax
+        mov rax, [rel happiness]
+        add rax, 5
+        mov [rel happiness], rax
+        mov rax, [rel jobs]
+        add rax, 20
+        mov [rel jobs], rax
+    %elifidni %2, factory_effect
+        mov rax, [rel jobs]
+        add rax, 30
+        mov [rel jobs], rax
+        mov rax, [rel factories]
+        inc rax
+        mov [rel factories], rax
+    %endif
+    
     jmp %%end_build
+    
 %%not_enough_funds:
     lea rcx, [rel not_enough_money]
     call printf
+    ; Не уменьшаем turns_left и не применяем эффекты
+    
 %%end_build:
+    print_stats  ; Выводим статистику один раз в конце
 %endmacro
 
 main:
@@ -92,7 +125,6 @@ game_loop:
     test rax, rax
     jz turns_ended
     
-    print_stats
     jmp build_menu
 
 turns_ended:
@@ -124,45 +156,15 @@ build_menu:
 
 build_house:
     build_structure house_cost, house_effect
-    mov rax, [rel population]
-    add rax, 50
-    mov [rel population], rax
-    mov rax, [rel turns_left]   
-    dec rax
-    mov [rel turns_left], rax
-    print_stats
-    jmp game_loop              
+    jmp game_loop
 
 build_hospital:
     build_structure hospital_cost, hospital_effect
-    mov rax, [rel social_welfare]
-    add rax, 10
-    mov [rel social_welfare], rax
-    mov rax, [rel happiness]
-    add rax, 5
-    mov [rel happiness], rax
-    mov rax, [rel jobs]
-    add rax, 20
-    mov [rel jobs], rax
-    mov rax, [rel turns_left]  
-    dec rax
-    mov [rel turns_left], rax
-    print_stats
-    jmp game_loop              
+    jmp game_loop
 
 build_factory:
     build_structure factory_cost, factory_effect
-    mov rax, [rel jobs]
-    add rax, 30
-    mov [rel jobs], rax
-    mov rax, [rel factories]
-    inc rax
-    mov [rel factories], rax
-    mov rax, [rel turns_left]   
-    dec rax
-    mov [rel turns_left], rax
-    print_stats
-    jmp game_loop              
+    jmp game_loop            
 
 end_turn:
     lea rcx, [rel turn_end_msg]
