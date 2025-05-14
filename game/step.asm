@@ -37,6 +37,7 @@ section .data
     house_effect db "Effect: Population +50", 10, 0
     hospital_effect db "Effect: Social welfare +10, Happiness +5, Jobs +20", 10, 0
     factory_effect db "Effect: Jobs +30, Factory added", 10, 0
+    msg_no_more_turns db "Turns have ended! No more actions available.", 10, 0
 
     ; Format strings
     build_choice_format db "%d", 0
@@ -89,7 +90,15 @@ main:
 game_loop:
     mov rax, [rel turns_left]
     test rax, rax
-    jz game_over
+    jz turns_ended
+    
+    print_stats
+    jmp build_menu
+
+turns_ended:
+    lea rcx, [rel msg_no_more_turns]
+    call printf
+  
 
 build_menu:
     lea rcx, [rel build_prompt]
