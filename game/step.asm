@@ -35,7 +35,7 @@ section .data
     invalid_choice db "Invalid choice! Please select 0-3.", 10, 0
     income_msg db "Income this turn: %d (base) + %d (from factories) = %d", 10, 0
     house_effect db "Effect: Population +50", 10, 0
-    hospital_effect db "Effect: Social welfare +10, Happiness +5", 10, 0
+    hospital_effect db "Effect: Social welfare +10, Happiness +5, Jobs +20", 10, 0
     factory_effect db "Effect: Jobs +30, Factory added", 10, 0
 
     ; Format strings
@@ -118,8 +118,11 @@ build_house:
     mov rax, [rel population]
     add rax, 50
     mov [rel population], rax
+    mov rax, [rel turns_left]   
+    dec rax
+    mov [rel turns_left], rax
     print_stats
-    jmp build_menu
+    jmp game_loop              
 
 build_hospital:
     build_structure hospital_cost, hospital_effect
@@ -129,8 +132,14 @@ build_hospital:
     mov rax, [rel happiness]
     add rax, 5
     mov [rel happiness], rax
+    mov rax, [rel jobs]
+    add rax, 20
+    mov [rel jobs], rax
+    mov rax, [rel turns_left]  
+    dec rax
+    mov [rel turns_left], rax
     print_stats
-    jmp build_menu
+    jmp game_loop              
 
 build_factory:
     build_structure factory_cost, factory_effect
@@ -140,18 +149,21 @@ build_factory:
     mov rax, [rel factories]
     inc rax
     mov [rel factories], rax
+    mov rax, [rel turns_left]   
+    dec rax
+    mov [rel turns_left], rax
     print_stats
-    jmp build_menu
+    jmp game_loop              
 
 end_turn:
     lea rcx, [rel turn_end_msg]
     call printf
 
-    mov rbx, base_income_per_turn    
+    mov rbx, base_income_per_turn
     mov rax, [rel factories]
-    imul rax, factory_income_per_turn 
-    add rbx, rax                  
-    
+    imul rax, factory_income_per_turn
+    add rbx, rax
+
     push rbx
     sub rsp, 32
     lea rcx, [rel income_msg]
@@ -161,7 +173,7 @@ end_turn:
     mov r9, rbx
     call printf
     add rsp, 40
-   
+
     mov rax, [rel money]
     add rax, rbx
     mov [rel money], rax
@@ -171,8 +183,7 @@ end_turn:
     mov [rel turns_left], rax
 
     print_stats
-   
-    jmp game_loop
+    jmp game_loop 
 
 game_over:
     lea rcx, [rel game_over_msg]
