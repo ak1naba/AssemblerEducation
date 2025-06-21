@@ -27,7 +27,7 @@ section .data
               db "Treasury: %d", 10
               db "Factories: %d", 10
               db "Turns left: %d", 10, 0
-    build_prompt db "What to build? (1 - House, 2 - Hospital, 3 - Factory, 0 - End turn): ", 0
+    build_prompt db "What to build? (1 - House (10000), 2 - Hospital (30000), 3 - Factory (50000), 0 - End turn): ", 0
     turn_end_msg db "Ending turn... Income calculated.", 10, 0
     game_over_msg db "Game over! Final statistics:", 10, 0
     not_enough_money db "Not enough money for construction!", 10, 0
